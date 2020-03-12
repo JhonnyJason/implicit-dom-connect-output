@@ -29,6 +29,7 @@
   //endregion
 
   //###########################################################
+  //region localModules
   cfg = null;
 
   pug = null;
@@ -36,6 +37,8 @@
   path = null;
 
   coffee = null;
+
+  //endregion
 
   //###########################################################
   mainprocessmodule.initialize = function() {
@@ -53,7 +56,8 @@
     await path.preparePugHeadPath(e.pugHead);
     await path.prepareCoffeeCodePath(e.coffeeCode);
     // await path.prepareOutputPath(e.output)
-    await pug.readFiles();
+
+    // await pug.readFiles()
     await coffee.scanForUsedIds();
   };
 
