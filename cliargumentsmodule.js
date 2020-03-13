@@ -46,6 +46,9 @@ Options
             function.
             The path may be relative or absolute.
 
+    optional:
+        --watch, -w
+            flag that we should watch on file-change.
 
 TO NOTE:
     The flags will overwrite the flagless argument.
@@ -70,18 +73,23 @@ Examples
         output: {
           type: "string",
           alias: "o"
+        },
+        watch: {
+          type: "boolean",
+          alias: "w"
         }
       }
     };
   };
 
   extractMeowed = function(meowed) {
-    var coffeeCode, output, pugHead;
+    var coffeeCode, output, pugHead, watch;
     log("extractMeowed");
     //###########################################################
     pugHead = null;
     coffeeCode = null;
     output = null;
+    watch = false;
     //###########################################################
     if (meowed.input[0]) {
       pugHead = meowed.input[0];
@@ -103,6 +111,9 @@ Examples
     if (meowed.flags.output) {
       output = meowed.flags.output;
     }
+    if (meowed.flags.watch) {
+      watch = meowed.flags.watch;
+    }
     if (!pugHead) {
       throw "Usage failure!";
     }
@@ -112,7 +123,7 @@ Examples
     if (!output) {
       throw "Usage failure!";
     }
-    return {pugHead, coffeeCode, output};
+    return {pugHead, coffeeCode, output, watch};
   };
 
   //endregion
