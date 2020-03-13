@@ -65,6 +65,8 @@
 
   pathhandlermodule.outputPath = ""; //file
 
+  pathhandlermodule.templatePath = ""; //file
+
   //endregion
   //endregion
 
@@ -72,6 +74,7 @@
   pathhandlermodule.initialize = function() {
     log("pathhandlermodule.initialize");
     cfg = allModules.configmodule;
+    pathhandlermodule.templatePath = pathModule.resolve(__dirname, cfg.outputTemplatePath);
   };
 
   //###########################################################
@@ -185,11 +188,22 @@
     }
   };
 
-  pathhandlermodule.prepareOutputPath = function(providedPath) {
+  pathhandlermodule.prepareOutputPath = async function(providedPath) {
+    var exists, lastDir;
     log("pathhandlermodule.prepareOutputPath");
-    throw "prepareOutputPath - not implemented yet";
     if (!providedPath) {
       throw "prepareOutputPath - no providedPath";
+    }
+    providedPath = resolveHomeDir(providedPath);
+    if (pathModule.isAbsolute(providedPath)) {
+      pathhandlermodule.outputPath = providedPath;
+    } else {
+      pathhandlermodule.outputPath = pathModule.resolve(process.cwd(), providedPath);
+    }
+    lastDir = pathModule.dirname(pathhandlermodule.outputPath);
+    exists = (await checkDirectoryExists(lastDir));
+    if (!exists) {
+      throw "Cannot write to output file - directory does not exist!";
     }
   };
 
@@ -197,20 +211,13 @@
 
   //###########################################################
   //region passingOtherFunctions
-  //#TODO rework
-  // providedPath = resolveHomeDir(providedPath)
-  // if pathModule.isAbsolute(providedPath)
-  //     pathhandlermodule.pugHeadPath = providedPath
-  // else
-  //     pathhandlermodule.pugHeadPath = pathModule.resolve(process.cwd(), providedPath)
-
-  // log "our pugHead is: " + pathhandlermodule.pugHeadPath
-  //# TODO check if the file exists
   pathhandlermodule.resolve = pathModule.resolve;
 
   pathhandlermodule.relative = pathModule.relative;
 
   pathhandlermodule.dirname = pathModule.dirname;
+
+  pathhandlermodule.basename = pathModule.basename;
 
   //endregion
 
