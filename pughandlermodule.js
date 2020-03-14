@@ -80,6 +80,8 @@
       includePath = foundIncludePaths[k];
       furtherFilePaths.push(path.resolve(base, includePath));
     }
+    log("foundIncludePaths");
+    olog(foundIncludePaths);
     processedFiles.push(filePath);
   };
 
@@ -146,8 +148,10 @@
     for (i = j = 0, len = tokens.length; j < len; i = ++j) {
       token = tokens[i];
       if (token === "include") {
-        foundIncludePaths.push(tokens[i + 1]);
-        return;
+        if (tokens[i + 1].lastIndexOf(".pug") === (tokens[i + 1].length - 4)) {
+          foundIncludePaths.push(tokens[i + 1]);
+          return;
+        }
       }
     }
   };
@@ -178,7 +182,9 @@
       bestGuessEnd = braceIndex;
     }
     id = line.slice(idHashIndex, bestGuessEnd);
-    foundIds.push(id);
+    if (!foundIds.includes("")) {
+      foundIds.push(id);
+    }
   };
 
   //endregion
@@ -195,6 +201,8 @@
       otherPath = furtherFilePaths.pop();
       processFile(otherPath);
     }
+    log("read all files");
+    olog(foundIds);
   };
 
   pughandlermodule.getAllIds = function() {

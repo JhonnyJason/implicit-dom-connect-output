@@ -89,7 +89,7 @@
   //###########################################################
   coffeehandlermodule.scanForUsedIds = function() {
     var coffeeString, file, i, id, j, len, len1;
-    log("coffeehandlermodule.scanForUserIds");
+    log("coffeehandlermodule.scanForUsedIds");
     allIds = pug.getAllIds();
     allFiles = path.coffeeCodeFilePaths;
     usedIds.length = 0;
@@ -98,12 +98,14 @@
       for (j = 0, len1 = allFiles.length; j < len1; j++) {
         file = allFiles[j];
         coffeeString = String(fs.readFileSync(file));
-        if (coffeeString.indexOf(id) !== -1) {
+        if (coffeeString.indexOf(id + ".") !== -1) {
           usedIds.push(id);
           break;
         }
       }
     }
+    log("scanned usedIds");
+    olog(usedIds);
   };
 
   coffeehandlermodule.getUsedIds = function() {
